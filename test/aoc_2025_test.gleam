@@ -26,4 +26,14 @@ pub fn rotate_test() {
   assert rotate(50, 30, 0) == 0
   assert rotate(1, -301, 0) == 4
   assert rotate(50, -1000, 0) == 10
+  assert rotate(50, 1000, 0) == 10
+  assert rotate(0, -500, 0) == 5
+  assert rotate(5, -10, 0) == 1
+  assert rotate(5, -3, 0) == 0
+  assert rotate(50, -51, 0) == 1
+  assert rotate(50, -50, 0) == 1
+  assert rotate(50, 50, 0) == 1
+  assert rotate(50, 49, 0) == 0
+  assert rotate(50, -49, 0) == 0
+  assert rotate(50, 150, 0) == 2
 }

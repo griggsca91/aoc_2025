@@ -38,13 +38,13 @@ pub fn rotate(position: Int, distance: Int, count: Int) -> Int {
     Zero -> 0
     Positive ->
       case distance {
-        x if x > 100 -> rotate(position, distance - 100, count + 1)
+        x if x >= 100 -> rotate(position, distance - 100, count + 1)
         x if position + x >= 100 -> count + 1
         _ -> count
       }
     Negative ->
       case distance {
-        x if x < -100 -> rotate(position, distance + 100, count + 1)
+        x if x <= -100 -> rotate(position, distance + 100, count + 1)
         x if position + x <= 0 -> count + 1
         _ -> count
       }
