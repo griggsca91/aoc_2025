@@ -33,20 +33,26 @@ fn sign(a: Int) -> Sign {
   }
 }
 
-pub fn rotate(position: Int, distance: Int, count: Int) -> Int {
+pub fn rotate(position: Int, distance: Int, count: Int) -> #(Int, Int) {
+  let assert Ok(new_position) = int.modulo(position + distance, 100)
   case sign(distance) {
-    Zero -> 0
+    Zero -> #(new_position, count)
     Positive ->
       case distance {
-        x if x >= 100 -> rotate(position, distance - 100, count + 1)
-        x if position + x >= 100 -> count + 1
-        _ -> count
+        x if x > 100 -> rotate(position, distance - 100, count + 1)
+        x if position + x >= 100 -> #(new_position, count + 1)
+        _ -> #(new_position, count)
       }
     Negative ->
       case distance {
         x if x <= -100 -> rotate(position, distance + 100, count + 1)
-        x if position + x <= 0 -> count + 1
-        _ -> count
+        x if position + x < 0 && position > 0 -> {
+          #(new_position, count + 1)
+        }
+        x if position + x == 0 -> {
+          #(0, count + 1)
+        }
+        _ -> #(new_position, count)
       }
   }
 }
@@ -57,9 +63,7 @@ pub fn day1_part2(content: String) {
   |> list.map(parse_line)
   |> result.values
   |> list.map_fold(from: 50, with: fn(acc, a) {
-    let assert Ok(new_position) = int.modulo(acc + a, 100)
-
-    let times_past_zero = rotate(acc, a, 0)
+    let #(new_position, times_past_zero) = rotate(acc, a, 0)
 
     #(new_position, times_past_zero)
   })
