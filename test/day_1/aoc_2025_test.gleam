@@ -1,4 +1,4 @@
-import aoc_2025.{InvalidDirection, InvalidDistance, parse_line, rotate}
+import day_1/day_1.{InvalidDirection, InvalidDistance, parse_line, rotate}
 import gleeunit
 
 pub fn main() -> Nil {
