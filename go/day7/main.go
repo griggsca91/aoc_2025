@@ -46,7 +46,7 @@ func part2(content []byte) string {
 
 	rows := bytes.Split(content, []byte{'\n'})
 	fmt.Println("rows", len(rows), len(rows[0]))
-	cache = make([]int, len(rows)*len(rows[0]))
+	cache = New(len(rows), len(rows[0]))
 
 	// go through each row
 	fmt.Println(traverse(rows, 1, col) + 1)
@@ -59,15 +59,35 @@ var calls int
 
 // its faster than a map
 var (
-	cache []int
+	cache syncCache
 )
 
+type syncCache struct {
+	cacheRaw []int
+	columns  int
+}
+
+func New(rows, columns int) syncCache {
+	return syncCache{
+		cacheRaw: make([]int, rows*columns),
+		columns:  columns,
+	}
+}
+
+func (s *syncCache) Set(x, y, value int) {
+	s.cacheRaw[x*s.columns+y] = value
+}
+
+func (s *syncCache) Get(x, y int) (int, bool) {
+	return s.cacheRaw[x*s.columns+y], s.cacheRaw[x*s.columns+y] != 0
+}
+
 func traverse(graph [][]byte, x, y int) (result int) {
-	if result := cache[len(graph[0])*x+y]; result != 0 {
+	if result, ok := cache.Get(x, y); ok {
 		return result
 	}
 	defer func() {
-		cache[len(graph[0])*x+y] = result
+		cache.Set(x, y, result)
 	}()
 	if x >= len(graph) {
 		return 0
